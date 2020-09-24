@@ -25,7 +25,10 @@ class MySpider:
     cityIds = ['010','020','050090','050020','170020','070020']
 
     # 用于匹配职位链接的Regular express
-    regExp = '<a[^>]*href=\"(https://www.liepin.com/job[^"]*)\"[^>]*'
+    regExpUrl = '<a[^>]*href=\"(https://www.liepin.com/job[^"]*)\"[^>]*'
+
+    # 用于匹配职位
+    regExpRequire = '<div class=\"content content-word\">[\s\S]*?(?<=任职资格|任职要求)[:：]?([\s\S]*?)</div>'
 
     def __init__(self) -> None:
         self.init()
@@ -71,13 +74,13 @@ class MySpider:
                     data_html = data_orgin.content.decode("utf-8")
 
                     # 判断是是否成功爬取到了html内容
-                    if '<!DOCTYPE html>' in data_orgin.text and job in data_orgin.text:
+                    if '<!DOCTYPE html>' in data_html and job in data_html:
                         print('get data success!')
                     else:
                         print('get data failed!')
                     
                     # 通过正则表达式获取职位url
-                    data_reGet = re.compile(self.regExp).findall(data_html)
+                    data_reGet = re.compile(self.regExpUrl).findall(data_html)
 
                     for url_a in data_reGet:
                         print(url_a)
@@ -90,14 +93,56 @@ class MySpider:
                         jobNum=1000
             time.sleep(random.randint(1,4))
             f.close()
+
+            print('Get url finish!')
     
     def run_getDetail(self):
         # 获取职位细节
 
+        # 最多爬的url
+        maxNum = 20
         for job in self.jobs:
-            pass
+            # 遍历各个职位
+            print('当前职位:',job)
+
+            with open(os.getcwd()+'/spider/data/'+self.targetName+'_Job-'+job+'.csv') as csvfile:
+                spamreader = csv.reader(csvfile, delimiter=' ', quotechar='|')
+                numOfUrl = 0
+                for row in spamreader:
+
+                    numOfUrl = numOfUrl+1
+                    if numOfUrl ==1:
+                        # 忽略掉第一行
+                        continue
+                    elif numOfUrl > maxNum:
+                        break
+                    
+                    url_target_final = row[0]
+
+                    # 通过requests的get方法爬取数据，自动切换User-agents
+                    data_orgin = requests.get(url=url_target_final,headers=self.UA())
+
+                    # 将爬取到的信息用utf-8编码
+                    data_html = data_orgin.content.decode("utf-8")
+
+                    # 判断是是否成功爬取到了html内容
+                    if '<!DOCTYPE html>' in data_html and job in data_html:
+                        print('get '+url_target_final+' data success!')
+                    else:
+                        print('get '+url_target_final+' data failed!')
+
+                    # 通过正则表达式获取职位要求
+                    data_reGet = re.compile(self.regExpRequire).findall(data_html)
+
+                    # 输出匹配到的结果
+                    for data_detail in data_reGet:
+                        theStr = str(data_detail)
+                        theStr = theStr.replace('<br/>','\n')
+                        print(theStr)
+
+                    time.sleep(0.1)
         
-        pass
+        print('Get detail finish!')
 
 if __name__ == '__main__':
     # 创建爬虫对象
@@ -106,5 +151,6 @@ if __name__ == '__main__':
     # 爬取职位url
     # spider.run()
 
-    # 爬取职位细节
+    # 爬取职位细节,在这一步之前请先运行MySpider的run()方法
     spider.run_getDetail()
+

@@ -3,6 +3,8 @@
 使用爬虫爬取职位信息
 spider文件夹内为爬取文件，其中ipynb文件为调试用，Spider_网站名.py为正式的爬取文件
 
+![](figures/fig1.png)
+
 ## 实验题目
 
 1. python环境的安装以及职位详情页链接爬取。
@@ -51,3 +53,7 @@ https://www.liepin.com/zhaopin
     ├── index.html
     └── smallApp.ipynb
 ```
+
+## MIT License
+
+仅供学习参考，请勿抄袭
