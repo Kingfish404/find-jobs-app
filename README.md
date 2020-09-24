@@ -1,6 +1,7 @@
 # Find Jobs APP
 
 使用爬虫爬取职位信息
+spider文件夹内为爬取文件，其中ipynb文件为调试用，Spider_网站名.py为正式的爬取文件
 
 ## 实验题目
 
@@ -36,13 +37,17 @@ https://www.liepin.com/zhaopin
 ## 目录
 ```shell
 .
+├── Note.md
 ├── README.md
+├── __pycache__
 │   ├── data.cpython-38.pyc
 │   └── request.cpython-38.pyc
 ├── example_spider.py
-└── spider - 爬虫文件夹
+└── spider
     ├── SpiderData.py
+    ├── Spider_liepin.py
     ├── app.ipynb
-    ├── data -最终数据文件夹
+    ├── data
+    ├── index.html
     └── smallApp.ipynb
 ```
