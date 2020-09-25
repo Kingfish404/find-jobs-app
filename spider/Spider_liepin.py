@@ -270,7 +270,7 @@ class MySpider:
                     plt.axis("off")
                     # plt.show()
 
-                    plt.savefig(os.getcwd()+'/spider/data/' +
+                    plt.savefig(os.getcwd()+'/docs/data/' +
                           self.targetName+'_wordCloud-'+job+'.png')
 
                     time.sleep(0.5)
