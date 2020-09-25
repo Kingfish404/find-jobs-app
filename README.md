@@ -31,9 +31,10 @@ https://www.51job.com/
 猎聘网
 https://www.liepin.com/zhaopin
 
-## 使用的库
+## 第三方库
 
-[request](https://requests.readthedocs.io/zh_CN/latest/user/quickstart.html)
+[request](https://requests.readthedocs.io/zh_CN/latest/user/quickstart.html) - request爬虫  
+[jieba](https://github.com/fxsjy/jieba) - jieba分词  
 
 
 ## 目录
