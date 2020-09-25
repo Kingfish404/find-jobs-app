@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Jobs App</title>
+</head>
+<style>
+    *{
+        background-color: white;
+        text-align: center;
+    }
+    h1,h2,h3,h4,h5{
+        text-align: center;
+    }
+
+    #wordCloud{
+        align-items: center;
+    }
+</style>
+<body>
+    <h1>图云</h1>
+    <div id="wordCloud">
+    </div>
+</body>
+<script>
+    var jobs = ['数据挖掘', '图像算法工程师', 'java后端', '互联网产品经理'];
+    
+    var divCloud = document.getElementById('wordCloud');
+
+    for (i in jobs){
+        console.log(jobs[i])
+        divCloud.innerHTML = divCloud.innerHTML+'<h2>'+jobs[i]+'</h2>'
+        divCloud.innerHTML = divCloud.innerHTML+'<img src="../spider/data/liepin_wordCloud-'+jobs[i]+'.png" alt="">'
+    }
+
+
+</script>
+</html>
