@@ -3,9 +3,6 @@
 # @auther jinyu
 # @date 2020-09-24
 
-from csv import Error
-from time import sleep
-from typing import final
 import requests
 import random
 import re
@@ -13,10 +10,9 @@ import os
 import time
 import csv
 import jieba
-from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
-import matplotlib.pyplot as plt
-
 from jieba import analyse
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
 
 from SpiderData import *
 
@@ -261,12 +257,15 @@ class MySpider:
                         str_line = txtFile.readline()
                         if not str_line:
                             break
+                        if str_line == '':
+                            continue
                         str_keyword = str_keyword + str_line
 
                     print(str_keyword)
 
                     wordcloud = WordCloud(font_path='./font/PingFang.ttc',
                                           background_color="white").generate(str_keyword)
+
                     plt.imshow(wordcloud, interpolation='bilinear')
                     plt.axis("off")
                     # plt.show()

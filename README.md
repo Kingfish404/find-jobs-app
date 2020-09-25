@@ -4,6 +4,7 @@
 spider文件夹内为爬取文件，其中ipynb文件为调试用，Spider_网站名.py为正式的爬取文件
 
 ![](figures/fig1.png)
+![](figures/fig2.png)
 
 ## 实验题目
 
