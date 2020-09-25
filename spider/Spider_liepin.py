@@ -1,3 +1,4 @@
+# coding:utf-8
 # 这里面是爬猎聘网的代码
 # @auther jinyu
 # @date 2020-09-24
@@ -12,6 +13,9 @@ import os
 import time
 import csv
 import jieba
+from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
+import matplotlib.pyplot as plt
+
 from jieba import analyse
 
 from SpiderData import *
@@ -117,7 +121,7 @@ class MySpider:
         # 获取职位细节
 
         # 最多爬的url
-        maxNum = 20
+        maxNum = 40
         for job in self.jobs:
             # 遍历各个职位
             print('当前职位:', job)
@@ -182,6 +186,9 @@ class MySpider:
     def processData(self):
         # 对职位细节进行数据清洗
 
+        # 词云关键词提取权重,越小越少
+        MyTopK = 100
+
         try:
             for job in self.jobs:
 
@@ -217,14 +224,14 @@ class MySpider:
 
                 # TF-IDF
                 TF_IDF = analyse.extract_tags
-                keywords = TF_IDF(str_jobRequire, topK=100)
+                keywords = TF_IDF(str_jobRequire, topK=MyTopK)
 
-                num_word =0
+                num_word = 0
                 for key in keywords:
                     print(key, end=' ')
-                    num_word=num_word+1
+                    num_word = num_word+1
                     f.write(key+' ')
-                    if num_word % 10 ==0:
+                    if num_word % 10 == 0:
                         f.write('\n')
 
                 f.write('\n')
@@ -233,7 +240,7 @@ class MySpider:
 
                 f.close()
 
-                time.sleep(1)
+                time.sleep(0.2)
         except IOError as e:
             print('无法打开职位细节文件,请提前运行run_getDetail()')
         except Exception as e:
@@ -242,6 +249,42 @@ class MySpider:
             print('processData finish!')
 
         print('processData end')
+
+    def createWordCloud(self):
+        try:
+            for job in self.jobs:
+                with open(os.getcwd()+'/spider/data/' +
+                          self.targetName+'_keyword-'+job+'.txt', 'r') as txtFile:
+                    str_keyword = str()
+
+                    while(True):
+                        str_line = txtFile.readline()
+                        if not str_line:
+                            break
+                        str_keyword = str_keyword + str_line
+
+                    print(str_keyword)
+
+                    wordcloud = WordCloud(font_path='./font/PingFang.ttc',
+                                          background_color="white").generate(str_keyword)
+                    plt.imshow(wordcloud, interpolation='bilinear')
+                    plt.axis("off")
+                    # plt.show()
+
+                    plt.savefig(os.getcwd()+'/spider/data/' +
+                          self.targetName+'_wordCloud-'+job+'.png')
+
+                    time.sleep(0.5)
+                pass
+        except IOError:
+            print('Open File Error')
+
+        except Exception as e:
+            print(e.args)
+        finally:
+            print('createWordCloud Finish!')
+
+        print('createWordCloud end')
 
 
 if __name__ == '__main__':
@@ -255,4 +298,7 @@ if __name__ == '__main__':
     # spider.run_getDetail()
 
     # 对职位细节进行数据清洗
-    spider.processData()
+    # spider.processData()
+
+    # 根据职位keyword生成词云
+    spider.createWordCloud()

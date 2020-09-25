@@ -35,6 +35,8 @@ https://www.liepin.com/zhaopin
 
 [request](https://requests.readthedocs.io/zh_CN/latest/user/quickstart.html) - request爬虫  
 [jieba](https://github.com/fxsjy/jieba) - jieba分词  
+[matplotlib]() - 图像显示
+[wordcloud](https://github.com/amueller/word_cloud) - 词云
 
 
 ## 目录
@@ -42,16 +44,14 @@ https://www.liepin.com/zhaopin
 .
 ├── Note.md
 ├── README.md
-├── __pycache__
-│   ├── data.cpython-38.pyc
-│   └── request.cpython-38.pyc
 ├── example_spider.py
+├── figures
+│   └── fig1.png
 └── spider
     ├── SpiderData.py
     ├── Spider_liepin.py
     ├── app.ipynb
     ├── data
-    ├── index.html
     └── smallApp.ipynb
 ```
 
