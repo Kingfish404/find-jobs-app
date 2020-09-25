@@ -1,9 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Find Jobs App by WordCloud">
+    <meta name="theme-color" content="#fff" />
+
     <title>Find Jobs App</title>
 </head>
 <style>
@@ -59,6 +62,20 @@
         text-align: center;
     }
 
+    a{
+        text-decoration: none;
+        color: black;
+    }
+
+    footer{
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+    }
+    footer p{
+        font-size: 0.5em;
+    }
+
     #wordCloud {
         width: 100%;
         align-items: center;
@@ -72,7 +89,9 @@
 </style>
 
 <body>
-    <h1>Find Jobs App</h1>
+    <header>
+        <h1>Find Jobs App</h1>
+    </header>
     <h2>职位</h2>
     <select name="job" id="select-job" size=3>
         <option value="数据挖掘">数据挖掘</option select>
@@ -93,6 +112,10 @@
     <button id="btnWC" onclick="loadWordCloud()">生成云图</button autofocus>
     <div id="wordCloud">
     </div>
+    <footer>
+        <p>数据来源 - 猎聘网</p>
+        <p><a href="https://blog.achacker.com/">Copyright @ 2020 JinYu</a></p>
+    </footer>
 </body>
 <script>
     var jobs = ['数据挖掘', '图像算法工程师', 'java后端', '互联网产品经理'];

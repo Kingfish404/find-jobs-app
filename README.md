@@ -38,7 +38,7 @@ https://www.liepin.com/zhaopin
 [jieba](https://github.com/fxsjy/jieba) - jieba分词  
 [matplotlib]() - 图像显示
 [wordcloud](https://github.com/amueller/word_cloud) - 词云
-
+[pandas] - csv数据处理
 
 ## 目录
 ```shell
