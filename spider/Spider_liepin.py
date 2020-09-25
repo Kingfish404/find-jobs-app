@@ -3,12 +3,14 @@
 # @auther jinyu
 # @date 2020-09-24
 
+from csv import Error
 import requests
 import random
 import re
 import os
 import time
 import csv
+import pandas as pd
 import jieba
 from jieba import analyse
 from wordcloud import WordCloud
@@ -29,6 +31,7 @@ class MySpider:
     # 待爬取的城市,和对应的dqs
     citys = ['北京', '上海', '深圳', '广州', '武汉', '杭州']
     cityIds = ['010', '020', '050090', '050020', '170020', '070020']
+
     # 用于匹配职位链接的Regular express
     regExpUrl = '<a[^>]*href=\"(https://www.liepin.com/job[^"]*)\"[^>]*'
     # 用于匹配职位
@@ -94,7 +97,7 @@ class MySpider:
 
                         for url_a in data_reGet:
                             print(url_a)
-                            f.write(url_a+' ,'+self.citys[i]+' \n')
+                            f.write(url_a+' , '+self.citys[i]+' \n')
                             jobNum = jobNum+1
                             time.sleep(0.01)
 
@@ -117,30 +120,36 @@ class MySpider:
         # 获取职位细节
 
         # 最多爬的url
-        maxNum = 40
+        maxNum = 5
+        
         for job in self.jobs:
             # 遍历各个职位
             print('当前职位:', job)
 
-            try:
-                with open(os.getcwd()+'/spider/data/'+self.targetName+'_Job-'+job+'.csv') as csvfile:
-                    spamreader = csv.reader(
-                        csvfile, delimiter=' ', quotechar='|')
-                    numOfUrl = 0
+            for city in self.citys:
+                try:
+                    csvData = pd.read_csv(
+                        os.getcwd()+'/spider/data/'+self.targetName+'_Job-'+job+'.csv')
 
                     f = open(os.getcwd()+'/spider/data/' +
-                             self.targetName+'_require-'+job+'.txt', 'w')
+                             self.targetName+'_require-'+job+'_city-'+city+'.txt', 'w')
+                    
+                    numOfUrl = 0
 
-                    for row in spamreader:
+                    for i in range(csvData.shape[0]):
+
+                        if numOfUrl > maxNum:
+                            break
+                        
+                        # 判断当前是否到了当前城市
+                        if(not city in csvData.city[i]):
+                            continue
 
                         numOfUrl = numOfUrl+1
-                        if numOfUrl == 1:
-                            # 忽略掉第一行
-                            continue
-                        elif numOfUrl > maxNum:
-                            break
 
-                        url_target_final = row[0]
+                        url_target_final = csvData.url[i]
+
+                        url_target_final = str(url_target_final).replace(' ','')
 
                         # 通过requests的get方法爬取数据，自动切换User-agents
                         data_orgin = requests.get(
@@ -151,7 +160,7 @@ class MySpider:
 
                         # 判断是是否成功爬取到了html内容
                         if '<!DOCTYPE html>' in data_html and job in data_html:
-                            print('get '+url_target_final+' data success!')
+                            print('get '+url_target_final+'data success!')
                         else:
                             print('get '+url_target_final+' data failed!')
 
@@ -166,16 +175,16 @@ class MySpider:
                                 theStr = theStr.replace('<br/>', '\n')
                                 f.write(theStr)
                                 print(theStr)
-
-                        time.sleep(random.randint(1, 5)*0.1)
-
+                        time.sleep(0.1)
+                    
+                    time.sleep(random.randint(1,5)*0.1)
                     f.close()
-            except IOError:
-                print('找不到职位的csv文件，请先运行run()方法')
-            except Exception as e:
-                print(e.args)
-            finally:
-                print('Get detail finish!')
+                except IOError:
+                    print('找不到职位的csv文件，请先运行run()方法')
+                except Exception as e:
+                    print(e.args)
+                finally:
+                    print('Get detail finish!')
 
         print('run_getDetail end')
 
@@ -190,53 +199,56 @@ class MySpider:
 
                 print('当前职位:', job)
 
-                f = open(os.getcwd()+'/spider/data/' +
-                         self.targetName+'_keyword-'+job+'.txt', 'w')
-
-                with open(os.getcwd()+'/spider/data/' +
-                          self.targetName+'_require-'+job+'.txt', 'r') as txtFile:
+                for city in self.citys:
+                
+                    f = open(os.getcwd()+'/spider/data/' +
+                    self.targetName+'_keyword-'+job+'_city-'+city+'.txt', 'w')
+                
                     str_jobRequire = str()
-                    while(True):
-                        str_line = txtFile.readline()
 
-                        if not str_line:
-                            break
+                    with open(os.getcwd()+'/spider/data/' +
+                            self.targetName+'_require-'+job+'_city-'+city+'.txt') as txtFile:
+                        while(True):
+                            str_line = txtFile.readline()
 
-                        # print(str_line)
-                        str_jobRequire = str_jobRequire+str_line
+                            if not str_line:
+                                break
 
-                str_jobRequire = str_jobRequire.replace('\n\n', '\n')
-                str_jobRequire = str_jobRequire.replace(' ', '')
+                            str_jobRequire = str_jobRequire+str_line
 
-                # 去除序号与结尾
-                str_jobRequire = re.sub(
-                    r'([0-9 a-z]+[\.\、,，)）])|（ [0-9]+ ）|[;；]', '', str_jobRequire)
+                    str_jobRequire = str_jobRequire.replace('\n\n', '\n')
+                    str_jobRequire = str_jobRequire.replace(' ', '')
 
-                # 去除不重要的标点
-                str_jobRequire = re.sub(r'[，、。【】（）/]', ' ', str_jobRequire)
+                    # 去除序号与结尾
+                    str_jobRequire = re.sub(
+                        r'([0-9 a-z]+[\.\、,，)）])|（ [0-9]+ ）|[;；]', '', str_jobRequire)
 
-                # 结巴分词
-                # keywords = jieba.cut(str_jobRequire,cut_all=False)
+                    # 去除不重要的标点
+                    str_jobRequire = re.sub(r'[，、。【】（）/]', ' ', str_jobRequire)
 
-                # TF-IDF
-                TF_IDF = analyse.extract_tags
-                keywords = TF_IDF(str_jobRequire, topK=MyTopK)
+                    # 结巴分词
+                    # keywords = jieba.cut(str_jobRequire,cut_all=False)
 
-                num_word = 0
-                for key in keywords:
-                    print(key, end=' ')
-                    num_word = num_word+1
-                    f.write(key+' ')
-                    if num_word % 10 == 0:
-                        f.write('\n')
+                    # TF-IDF
+                    TF_IDF = analyse.extract_tags
+                    keywords = TF_IDF(str_jobRequire, topK=MyTopK)
 
-                f.write('\n')
+                    num_word = 0
 
-                print('\n\n')
+                    for key in keywords:
+                        print(key, end=' ')
+                        num_word = num_word+1
+                        f.write(key+' ')
+                        if num_word % 10 == 0:
+                            f.write('\n')
 
-                f.close()
+                    f.write('\n')
 
-                time.sleep(0.2)
+                    print('\n\n')
+
+                    f.close()
+
+                time.sleep(0.1)
         except IOError as e:
             print('无法打开职位细节文件,请提前运行run_getDetail()')
         except Exception as e:
@@ -249,32 +261,32 @@ class MySpider:
     def createWordCloud(self):
         try:
             for job in self.jobs:
-                with open(os.getcwd()+'/spider/data/' +
-                          self.targetName+'_keyword-'+job+'.txt', 'r') as txtFile:
-                    str_keyword = str()
+                for city in self.citys:
 
-                    while(True):
-                        str_line = txtFile.readline()
-                        if not str_line:
-                            break
-                        if str_line == '':
-                            continue
-                        str_keyword = str_keyword + str_line
+                    with open(os.getcwd()+'/spider/data/' +
+                            self.targetName+'_keyword-'+job+'_city-'+city+'.txt', 'r') as txtFile:
+                        str_keyword = str()
 
-                    print(str_keyword)
+                        while(True):
+                            str_line = txtFile.readline()
+                            if not str_line:
+                                break
+                            if str_line == '':
+                                continue
+                            str_keyword = str_keyword + str_line
 
-                    wordcloud = WordCloud(font_path='./font/PingFang.ttc',
-                                          background_color="white").generate(str_keyword)
+                        print(str_keyword)
 
-                    plt.imshow(wordcloud, interpolation='bilinear')
-                    plt.axis("off")
-                    # plt.show()
+                        wordcloud = WordCloud(font_path='./font/PingFang.ttc',
+                                            background_color="white").generate(str_keyword)
 
-                    plt.savefig(os.getcwd()+'/docs/data/' +
-                          self.targetName+'_wordCloud-'+job+'.png')
+                        plt.imshow(wordcloud, interpolation='bilinear')
+                        plt.axis("off")
+                        # plt.show()
 
-                    time.sleep(0.5)
-                pass
+                        plt.savefig(os.getcwd()+'/docs/data/' +
+                                    self.targetName+'_wordCloud-'+job+'_city-'+city+'.png')
+
         except IOError:
             print('Open File Error')
 

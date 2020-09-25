@@ -1,39 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Find Jobs App</title>
 </head>
 <style>
-    *{
-        background-color: white;
-        text-align: center;
-    }
-    h1,h2,h3,h4,h5{
+    * {
+        padding: 0;
+        margin: 0;
         text-align: center;
     }
 
-    #wordCloud{
+    html,
+    body {
+        width: 100%;
+        height: 100%;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5 {
+        text-align: center;
+    }
+    h1{
+        margin: 8px;
+    }
+    h2 {
+        margin: 5px auto;
+    }
+
+    button {
+        display: block;
+        min-width: 150px;
+        min-height: 40px;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        cursor: pointer;
+        outline: none;
+        border: 1px solid black;
+        background-color: #fff;
+        color: #212121;
+        transition: 1s;
+        margin: 2% auto auto;
+    }
+    button:hover{
+        transform: scale(1.1);
+    }
+
+    select {
+        min-width: 150px;
+        min-height: 40px;
+    }
+
+    select option {
+        text-align: center;
+    }
+
+    #wordCloud {
+        width: 100%;
         align-items: center;
     }
+
+    @media screen and (max-width:960px) {
+        #wordCloud img {
+            width: 100%;
+        }
+    }
 </style>
+
 <body>
-    <h1>图云</h1>
+    <h1>Find Jobs App</h1>
+    <h2>职位</h2>
+    <select name="job" id="select-job" multiple size=3>
+        <option value="数据挖掘">数据挖掘</option select>
+        <option value="图像算法工程师">图像算法工程师</option>
+        <option value="java后端">java后端</option>
+        <option value="互联网产品经理">互联网产品经理</option>
+    </select>
+    <h2>城市</h2>
+    <select name="city" id="select-city" multiple size=3>
+        <option value="北京">北京</option>
+        <option value="上海">上海</option>
+        <option value="深圳">深圳</option>
+        <option value="广州">广州</option>
+        <option value="武汉">武汉</option>
+        <option value="杭州">杭州</option>
+    </select>
+    
+    <button id="btnWC" onclick="loadWordCloud()">生成云图</button autofocus>
     <div id="wordCloud">
     </div>
 </body>
 <script>
     var jobs = ['数据挖掘', '图像算法工程师', 'java后端', '互联网产品经理'];
-    
-    var divCloud = document.getElementById('wordCloud');
+    var citys = ['北京', '上海', '深圳', '广州', '武汉', '杭州'];
+    btnSelectJob = document.getElementById('select-job').selectedIndex = 0;
+    btnSelectJob = document.getElementById('select-city').selectedIndex = 0;
 
-    for (i in jobs){
-        console.log(jobs[i])
-        divCloud.innerHTML = divCloud.innerHTML+'<h2>'+jobs[i]+'</h2>'
-        divCloud.innerHTML = divCloud.innerHTML+'<img src="./data/liepin_wordCloud-'+jobs[i]+'.png" alt="">'
+    function loadWordCloud() {
+        var divCloud = document.getElementById('wordCloud');
+        var btnSelectJob = document.getElementById('select-job');
+        var btnSelectCity = document.getElementById('select-city');
+
+        var jobIndex = btnSelectJob.selectedIndex;
+        var cityIndex = btnSelectCity.selectedIndex;
+
+        console.log(jobIndex,cityIndex)
+
+        divCloud.innerHTML = '<img src="./data/liepin_wordCloud-' + jobs[jobIndex] + '_city-'+citys[cityIndex]+'.png" alt="">'
     }
-
-
 </script>
+
 </html>
