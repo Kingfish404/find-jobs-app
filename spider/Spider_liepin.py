@@ -3,13 +3,11 @@
 # @auther jinyu
 # @date 2020-09-24
 
-from csv import Error
 import requests
 import random
 import re
 import os
 import time
-import csv
 import pandas as pd
 import jieba
 from jieba import analyse
@@ -23,6 +21,8 @@ class MySpider:
     # 爬虫-猎聘网
 
     targetName = 'liepin'
+
+    targetDir = '/docs/data/'
 
     # 猎聘网基础url
     url = 'https://www.liepin.com/zhaopin/?'
@@ -121,7 +121,7 @@ class MySpider:
 
         # 最多爬的url
         maxNum = 5
-        
+
         for job in self.jobs:
             # 遍历各个职位
             print('当前职位:', job)
@@ -133,14 +133,14 @@ class MySpider:
 
                     f = open(os.getcwd()+'/spider/data/' +
                              self.targetName+'_require-'+job+'_city-'+city+'.txt', 'w')
-                    
+
                     numOfUrl = 0
 
                     for i in range(csvData.shape[0]):
 
                         if numOfUrl > maxNum:
                             break
-                        
+
                         # 判断当前是否到了当前城市
                         if(not city in csvData.city[i]):
                             continue
@@ -149,7 +149,8 @@ class MySpider:
 
                         url_target_final = csvData.url[i]
 
-                        url_target_final = str(url_target_final).replace(' ','')
+                        url_target_final = str(
+                            url_target_final).replace(' ', '')
 
                         # 通过requests的get方法爬取数据，自动切换User-agents
                         data_orgin = requests.get(
@@ -176,8 +177,8 @@ class MySpider:
                                 f.write(theStr)
                                 print(theStr)
                         time.sleep(0.1)
-                    
-                    time.sleep(random.randint(1,5)*0.1)
+
+                    time.sleep(random.randint(1, 5)*0.1)
                     f.close()
                 except IOError:
                     print('找不到职位的csv文件，请先运行run()方法')
@@ -200,14 +201,14 @@ class MySpider:
                 print('当前职位:', job)
 
                 for city in self.citys:
-                
+
                     f = open(os.getcwd()+'/spider/data/' +
-                    self.targetName+'_keyword-'+job+'_city-'+city+'.txt', 'w')
-                
+                             self.targetName+'_keyword-'+job+'_city-'+city+'.txt', 'w')
+
                     str_jobRequire = str()
 
                     with open(os.getcwd()+'/spider/data/' +
-                            self.targetName+'_require-'+job+'_city-'+city+'.txt') as txtFile:
+                              self.targetName+'_require-'+job+'_city-'+city+'.txt') as txtFile:
                         while(True):
                             str_line = txtFile.readline()
 
@@ -264,7 +265,7 @@ class MySpider:
                 for city in self.citys:
 
                     with open(os.getcwd()+'/spider/data/' +
-                            self.targetName+'_keyword-'+job+'_city-'+city+'.txt', 'r') as txtFile:
+                              self.targetName+'_keyword-'+job+'_city-'+city+'.txt', 'r') as txtFile:
                         str_keyword = str()
 
                         while(True):
@@ -278,13 +279,13 @@ class MySpider:
                         print(str_keyword)
 
                         wordcloud = WordCloud(font_path='./font/PingFang.ttc',
-                                            background_color="white").generate(str_keyword)
+                                              background_color="white").generate(str_keyword)
 
                         plt.imshow(wordcloud, interpolation='bilinear')
                         plt.axis("off")
                         # plt.show()
 
-                        plt.savefig(os.getcwd()+'/docs/data/' +
+                        plt.savefig(os.getcwd() + self.targetDir +
                                     self.targetName+'_wordCloud-'+job+'_city-'+city+'.png')
 
         except IOError:
@@ -296,6 +297,9 @@ class MySpider:
             print('createWordCloud Finish!')
 
         print('createWordCloud end')
+
+    def setTime():
+        pass
 
 
 if __name__ == '__main__':

@@ -36,24 +36,19 @@ https://www.liepin.com/zhaopin
 
 [request](https://requests.readthedocs.io/zh_CN/latest/user/quickstart.html) - request爬虫  
 [jieba](https://github.com/fxsjy/jieba) - jieba分词  
-[matplotlib]() - 图像显示
-[wordcloud](https://github.com/amueller/word_cloud) - 词云
-[pandas] - csv数据处理
+[matplotlib](https://github.com/matplotlib/matplotlib) - 图像显示  
+[wordcloud](https://github.com/amueller/word_cloud) - 词云  
+[pandas](https://github.com/pandas-dev/pandas) - csv数据处理  
 
 ## 目录
 ```shell
 .
-├── Note.md
-├── README.md
-├── example_spider.py
+├── docs
+│   └── data
 ├── figures
-│   └── fig1.png
+├── font
 └── spider
-    ├── SpiderData.py
-    ├── Spider_liepin.py
-    ├── app.ipynb
-    ├── data
-    └── smallApp.ipynb
+    └── data
 ```
 
 ## MIT License

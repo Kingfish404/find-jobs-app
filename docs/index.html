@@ -29,9 +29,11 @@
     h5 {
         text-align: center;
     }
-    h1{
+
+    h1 {
         margin: 8px;
     }
+
     h2 {
         margin: 5px auto;
     }
@@ -49,7 +51,8 @@
         transition: 1s;
         margin: 2% auto auto;
     }
-    button:hover{
+
+    button:hover {
         transform: scale(1.1);
     }
 
@@ -62,14 +65,14 @@
         text-align: center;
     }
 
-    a{
+    a {
         text-decoration: none;
         color: black;
     }
 
-    footer{
+    footer {
         width: 100%;
-        position: absolute;
+        position: flex;
         bottom: 0;
     }
 
@@ -90,35 +93,42 @@
         <h1>Find Jobs App</h1>
     </header>
     <h2>职位</h2>
-    <select name="job" id="select-job" size=3>
-        <option value="数据挖掘">数据挖掘</option select>
-        <option value="图像算法工程师">图像算法工程师</option>
-        <option value="java后端">java后端</option>
-        <option value="互联网产品经理">互联网产品经理</option>
-    </select>
+    <select name="job" id="select-job" size=3></select>
     <h2>城市</h2>
-    <select name="city" id="select-city" size=3>
-        <option value="北京">北京</option>
-        <option value="上海">上海</option>
-        <option value="深圳">深圳</option>
-        <option value="广州">广州</option>
-        <option value="武汉">武汉</option>
-        <option value="杭州">杭州</option>
-    </select>
-    
+    <select name="city" id="select-city" size=3></select>
+
     <button id="btnWC" onclick="loadWordCloud()">生成云图</button autofocus>
     <div id="wordCloud">
     </div>
     <footer>
-        <p>数据来源 - 猎聘网</p>
+        <p>数据来源 - 猎聘网 - 2020-09</p>
         <p><a href="https://blog.achacker.com/">Copyright @ 2020 JinYu</a></p>
     </footer>
 </body>
 <script>
     var jobs = ['数据挖掘', '图像算法工程师', 'java后端', '互联网产品经理'];
     var citys = ['北京', '上海', '深圳', '广州', '武汉', '杭州'];
-    btnSelectJob = document.getElementById('select-job').selectedIndex = 0;
-    btnSelectJob = document.getElementById('select-city').selectedIndex = 0;
+
+    function init() {
+
+        var selectJobs = document.getElementById('select-job');
+        var selectCity = document.getElementById('select-city');
+        selectCity.innerHTML = ''
+        selectJobs.innerHTML = ''
+
+        for (i in jobs) {
+            if (i != 0) {
+                selectJobs.innerHTML = selectJobs.innerHTML + '<option value="' + jobs[i] + '">' + jobs[i] + '</option>'
+                selectCity.innerHTML = selectCity.innerHTML + '<option value="' + citys[i] + '">' + citys[i] + '</option>'
+            } else {
+                selectJobs.innerHTML = selectJobs.innerHTML + '<option value="' + jobs[i] + '">' + jobs[i] + '</option>'
+                selectCity.innerHTML = selectCity.innerHTML + '<option value="' + citys[i] + '">' + citys[i] + '</option>'
+            }
+        }
+
+        selectJobs.selectedIndex = 0;
+        selectCity.selectedIndex = 0;
+    }
 
     function loadWordCloud() {
         var divCloud = document.getElementById('wordCloud');
@@ -128,10 +138,10 @@
         var jobIndex = btnSelectJob.selectedIndex;
         var cityIndex = btnSelectCity.selectedIndex;
 
-        console.log(jobIndex,cityIndex)
-
-        divCloud.innerHTML = '<img src="./data/liepin_wordCloud-' + jobs[jobIndex] + '_city-'+citys[cityIndex]+'.png" alt="">'
+        divCloud.innerHTML = '<img src="./data/liepin_wordCloud-' + jobs[jobIndex] + '_city-' + citys[cityIndex] + '.png" alt="">'
     }
+
+    init()
 </script>
 
 </html>
