@@ -117,13 +117,8 @@
         selectJobs.innerHTML = ''
 
         for (i in jobs) {
-            if (i != 0) {
-                selectJobs.innerHTML = selectJobs.innerHTML + '<option value="' + jobs[i] + '">' + jobs[i] + '</option>'
-                selectCity.innerHTML = selectCity.innerHTML + '<option value="' + citys[i] + '">' + citys[i] + '</option>'
-            } else {
-                selectJobs.innerHTML = selectJobs.innerHTML + '<option value="' + jobs[i] + '">' + jobs[i] + '</option>'
-                selectCity.innerHTML = selectCity.innerHTML + '<option value="' + citys[i] + '">' + citys[i] + '</option>'
-            }
+            selectJobs.innerHTML = selectJobs.innerHTML + '<option value="' + jobs[i] + '">' + jobs[i] + '</option>'
+            selectCity.innerHTML = selectCity.innerHTML + '<option value="' + citys[i] + '">' + citys[i] + '</option>'
         }
 
         selectJobs.selectedIndex = 0;

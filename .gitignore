@@ -4,5 +4,6 @@ __pycache__
 */__pycache__
 */.ipynb_checkpoints
 spider/data/*
+spider/data_backup/*
 .ipynb_checkpoints
 data.json

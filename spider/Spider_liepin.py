@@ -310,10 +310,10 @@ if __name__ == '__main__':
     # spider.run()
 
     # 爬取职位细节,在这一步之前请先运行MySpider的run()方法
-    # spider.run_getDetail()
+    spider.run_getDetail()
 
     # 对职位细节进行数据清洗
-    # spider.processData()
+    spider.processData()
 
     # 根据职位keyword生成词云
     spider.createWordCloud()
