@@ -193,7 +193,10 @@ class MySpider:
         # 对职位细节进行数据清洗
 
         # 词云关键词提取权重,越小越少
-        MyTopK = 100
+        MyTopK = 200
+
+        # 只包含指定词性的词
+        MyAllowPOS = ('n','nr','ns','nt','nw','nz','s','f','t','t','an')
 
         try:
             for job in self.jobs:
@@ -232,7 +235,7 @@ class MySpider:
 
                     # TF-IDF
                     TF_IDF = analyse.extract_tags
-                    keywords = TF_IDF(str_jobRequire, topK=MyTopK)
+                    keywords = TF_IDF(str_jobRequire, topK=MyTopK,allowPOS=MyAllowPOS)
 
                     num_word = 0
 
@@ -310,10 +313,10 @@ if __name__ == '__main__':
     # spider.run()
 
     # 爬取职位细节,在这一步之前请先运行MySpider的run()方法
-    spider.run_getDetail()
+    # spider.run_getDetail()
 
     # 对职位细节进行数据清洗
-    spider.processData()
+    # spider.processData()
 
     # 根据职位keyword生成词云
     spider.createWordCloud()
